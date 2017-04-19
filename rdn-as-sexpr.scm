@@ -1,0 +1,17 @@
+(module
+ rdn-sexp
+ ((interface: ldif-rdn-constructor))
+ (import scheme)
+ (define (rdnsequence . args) args)
+ (define (rdnsequence-cons a b) (cons a b))
+ (define rdnsequence-empty? null?)
+ (define (rdnsequence-fold kons nil s)
+   (let loop ((i nil) (s s))
+     (if (null? s) i (loop (kons (car s) i) (cdr s)))))
+ (define (kv-empty) '())
+ (define (kv-cons a b) (cons a b))
+ (define kv? pair?)
+ (define (kv k v) (list k v))
+ (define (kv-k x) (car x))
+ (define (kv-v x) (cadr x))
+ )

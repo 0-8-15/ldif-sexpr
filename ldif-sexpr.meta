@@ -1,0 +1,13 @@
+;; -*- mode: Scheme; -*-
+((category parsing)
+ (synopsis "Convert (parse&write) LDIF, rfc4514 and LDAP filters (rfc2254) into S-expressions.")
+ (license "BSD")
+ (author "Jörg F. Wittenberger")
+ (needs uri-common base64)
+ (files "ldif-sexpr.meta" "ldif-sexpr.setup"
+	"ldif-interfaces.scm"
+	"ldif-core-impl.scm" "ldif-core.scm"
+	"rdn-as-sexpr.scm" "ldif-as-sexpr.scm"
+	"ldif-sexpr.scm"
+	"tests/run.scm")
+ '((version "0.1")))

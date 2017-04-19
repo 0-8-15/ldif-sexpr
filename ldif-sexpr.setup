@@ -1,0 +1,14 @@
+;;;; ldif-sexpr.setup -*- Scheme -*-
+
+(define common-options '(-O3 -d0 -scrutinize -lfa2 -notrace -no-lambda-info))
+
+
+(compile -s ,@common-options -u ldif-sexpr.scm -j ldif-sexpr)
+(compile -c ,@common-options -unit ldif-sexpr ldif-sexpr.scm -j ldif-sexpr)
+(compile -s ,@common-options ldif-sexpr.import.scm)
+
+(install-extension
+ 'ldif-sexpr 
+ '("ldif-sexpr.import.so" "ldif-sexpr.types" "ldif-sexpr.so" "ldif-sexpr.o")
+ '((version "0.1")
+   (static "ldif-sexpr.o")))

@@ -3,7 +3,7 @@
 (define common-options '(-O3 -d0 -scrutinize -lfa2 -no-trace -no-lambda-info))
 
 
-(compile -s ,@common-options -u ldif-sexpr.scm -j ldif-sexpr)
+(compile -s ,@common-options -u ldif-sexpr.scm -j ldif-sexpr -emit-type-file "ldif-sexpr.types")
 (compile -c ,@common-options -unit ldif-sexpr ldif-sexpr.scm -j ldif-sexpr)
 (compile -s ,@common-options ldif-sexpr.import.scm)
 

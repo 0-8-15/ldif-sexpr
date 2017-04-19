@@ -1,4 +1,6 @@
-(import (prefix ldif-parse2sexpr ldif:))
+;; TBD: Make a better test suite.
+
+(use (prefix ldif-sexpr ldif:))
 
 (define tr #<<EOF
 ### Sowas
@@ -20,8 +22,9 @@ nm: Blubber
 EOF
   )
 
-(display (with-input-from-string tr (lambda () (list (ldif:read) (ldif:read)))))
+(assert (= (length (with-input-from-string tr (lambda () (list (ldif:read) (ldif:read))))) 2))
 
+#|
 (use ports)
 
 (define dollarref
@@ -36,10 +39,31 @@ EOF
   (lambda()
     (port-fold cons '() (lambda () (ldif:read (current-input-port) value-converter: dollarref)))
     #;(list (ldif:read) (ldif:read) (ldif:read)))))
+|#
 
-(display (ldif:rfc4514-read "1.1.200.4 = a+2=X,b=3 , b=4" 0))
-(display (ldif:rfc4514-write (ldif:rfc4514-read "1.1.200.4 = a\\0a+2=X,b=3 , b=4" 0)))
-(newline)
-(for-each ldif:write (with-input-from-string tr (lambda () (list (ldif:read) (ldif:read)))))
+(assert (equal? (ldif:rfc4514-read "1.1.200.4 = a+2=X,b=3 , b=4" 0) '((("1.1.200.4" "a") ("2" "X")) (("b" "3")) (("b" "4")))))
+
+(assert (equal? (with-output-to-string
+		  (lambda ()
+		    (ldif:rfc4514-write (ldif:rfc4514-read "1.1.200.4 = a\\0a+2=X,b=3 , b=4" 0))))
+		"1.1.200.4=a\\0A+2=X,b=3,b=4"))
+
+(assert (equal? (with-output-to-string
+		  (lambda ()
+		    (for-each ldif:write (with-input-from-string tr (lambda () (list (ldif:read) (ldif:read)))))))
+		#<<EOF
+dn: soso=gaga
+nm;a2: Gacker
+url:<gacks://gick
+nm: Gick
+
+dn: DN=nm2
+nm: Blubber
+uss:: QUIKQ0Q=
+nm: Gacks
+
+
+EOF
+))
 
 (exit 0)

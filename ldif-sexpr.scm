@@ -79,12 +79,18 @@
 
  (define (make-ldif-attribute-set) '())
 
+ ;; (define (ldif-attribute+ i k v) `((,k . ,v) . ,i))
+
  (define (ldif-attribute+ i k v)
-   `((,k . ,v) . ,i))
+   `((,k ,v) . ,i))
+
+ ;; (define (ldif-attributes-fold kons nil atts)
+ ;;   (let loop ((i nil) (s atts))
+ ;;     (if (null? s) i (loop (let ((a (car s))) (kons (car a) (cdr a) i)) (cdr s)))))
 
  (define (ldif-attributes-fold kons nil atts)
    (let loop ((i nil) (s atts))
-     (if (null? s) i (loop (let ((a (car s))) (kons (car a) (cdr a) i)) (cdr s)))))
+     (if (null? s) i (loop (let ((a (car s))) (kons (car a) (cadr a) i)) (cdr s)))))
 
  ;; ## 2.2.3
  (define (base64-decode s) (string->blob (b64:base64-decode s)))

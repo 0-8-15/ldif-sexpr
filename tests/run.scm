@@ -24,6 +24,9 @@ EOF
 
 (assert (= (length (with-input-from-string tr (lambda () (list (ldif:read) (ldif:read))))) 2))
 
+(assert (equal? (ldif:ldif-attributes (with-input-from-string "dn: CN=foobar\nfoo: bar" ldif:read))
+	 '(("foo" "bar"))))
+
 #|
 (use ports)
 

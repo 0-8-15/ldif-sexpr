@@ -1,6 +1,6 @@
 ;;;; ldif-sexpr.setup -*- Scheme -*-
 
-(define common-options '(-O3 -d0 -scrutinize -lfa2 -notrace -no-lambda-info))
+(define common-options '(-O3 -d0 -scrutinize -lfa2 -no-trace -no-lambda-info))
 
 
 (compile -s ,@common-options -u ldif-sexpr.scm -j ldif-sexpr)

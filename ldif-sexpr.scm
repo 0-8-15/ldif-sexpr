@@ -41,6 +41,8 @@
   ;; generic part (the functor export)
   read write
   rfc4514-read rfc4514-write
+  ;; RFC 2254 "String Representation of LDAP Search Filters"
+  write-ldap-filter ldap-filter-string
   )
 
  ;; # 2 Inline replacement of datatype implementations

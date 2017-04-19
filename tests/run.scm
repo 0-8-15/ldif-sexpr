@@ -69,4 +69,8 @@ nm: Gacks
 EOF
 ))
 
+(assert (equal? (ldif:ldap-filter-string
+		 '(and (exists name) (= foo "bar")))
+		"(&(name=*)(foo=bar))"))
+
 (exit 0)

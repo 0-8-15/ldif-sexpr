@@ -245,6 +245,12 @@
       ((equal? k "dn")
        (let ((frame (read-attributes value-converter shift! peek (make-ldif-attribute-set))))
 	 (make-ldif (rfc4514-read v 0 value-converter: value-converter) frame)))
+      ;; FIXME: A horrible HACK to avoid having to extend the API but
+      ;; still succeed in parsing.  Note: make-ldif would have to be
+      ;; generic enough to return some useful thing here instead.
+      ((equal? k "ref")
+       (let ((uri (uri-reference v)))
+	 (make-ldif (rfc4514-read (cadr (uri-path uri)) 0) uri)))
       (else (error "ldif read: found" k v))))))
 
 
@@ -283,3 +289,55 @@
    )
 
 ;; end functor ldif-core
+
+ ;; RFC 2254 "String Representation of LDAP Search Filters"
+ ;;
+ ;; Belongs at least in a module of it's own.
+ ;;
+ ;; INCOMPLETE
+
+ (define-record ldif-filter-box v)
+
+ (define (rfc2254-write-att-value s p)
+   (do ((i 0 (add1 i)))
+       ((eqv? i (string-length s)))
+     (let ((c (string-ref s i)))
+       (cond
+	((string-index "\000*()\\" c)
+	 (let ((cc (char->integer c)))
+	   (display #\\ p)
+	   (let ((c1 (quotient cc 16)))
+	     (display (integer->char (fx+ (if (fx< c1 10) #x30 55) c1)) p))
+	   (let ((c1 (remainder cc 16)))
+	     (display (integer->char (fx+ (if (fx< c1 10) #x30 55) c1)) p))))
+	(else (display c p))))))
+
+ (define (write-ldap-filter obj #!optional (port (current-output-port)))
+   (define (recurse before after expr more)
+     (if before (display before port))
+     (write-ldap-filter* (make-ldif-filter-box expr))
+     (for-each (lambda (expr) (write-ldap-filter* (make-ldif-filter-box expr))) more)
+     (if after (display after port)))
+   (define (simple-filter? x)
+     (or (eq? x '=) (eq? x '~=) (eq? x '>=) (eq? x '<=)))
+   (define write-ldap-filter*
+     (match-lambda
+      ((? ldif-filter-box? x) (display "(" port) (write-ldap-filter* (ldif-filter-box-v x)) (display ")" port))
+      (('& expr . more) (recurse "(&" ")" expr more))
+      (('and expr . more) (recurse "(&" ")" expr more))
+      (('or expr . more) (recurse "(|" ")" expr more))
+      (('! expr) (recurse "(!" ")" expr '()))
+      (('not expr) (recurse "(!" ")" expr '()))
+      ;; simple
+      (((? simple-filter? filtertype) attr value)
+       (display attr port) (display filtertype port) (rfc2254-write-att-value value port))
+      (('dn: . more) (error "LDAP filter 'extensible' NOT YET IMPLEMENTED" more))
+      (('substring attr x . more) (display attr port) (display "=" port) (for-each (lambda (x) (if (eq? x '*) (display '* port) (rfc2254-write-att-value x port))) (cons x more)))
+      ;; Aliases for specific forms of `substring`
+      (('exists attr) (display attr port) (display "=*" port))
+      (wrong (error "not a valid LDAP filter specification" wrong))))
+   (write-ldap-filter* obj))
+
+ (import ports)
+ (define (ldap-filter-string obj)
+   (call-with-output-string (lambda (p) (write-ldap-filter obj p))))

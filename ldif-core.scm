@@ -6,6 +6,8 @@
   ;; TBD: Does NOT yet parse `ldif-change-record`'s, only `ldif-attrval-record`'s.
   read write
   rfc4514-read rfc4514-write
+  ;; RFC 2254 "String Representation of LDAP Search Filters"
+  write-ldap-filter ldap-filter-string
   )
  (import LDIF)
  (import (prefix RDN rfc4514-))

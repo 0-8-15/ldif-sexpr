@@ -73,4 +73,11 @@ EOF
 		 '(and (exists name) (= foo "bar")))
 		"(&(name=*)(foo=bar))"))
 
+(assert (equal? (ldif:ldap-filter-string
+		 '(matching name ("1.2.3" "root")))
+		"name:1.2.3:=root"))
+
+(assert (equal? (ldif:ldap-filter-string
+		 '(matching name (dn: "1.2.3" "root")))
+		"name:dn:1.2.3:=root"))
 (exit 0)

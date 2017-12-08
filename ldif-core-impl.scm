@@ -320,6 +320,12 @@
      (if after (display after port)))
    (define (simple-filter? x)
      (or (eq? x '=) (eq? x '~=) (eq? x '>=) (eq? x '<=)))
+   (define write-extensible-part
+     (match-lambda
+      ((oid value)
+       (display ":" port) (display oid port) (display ":=" port) (rfc2254-write-att-value value port))
+      (('dn: oid value)
+       (display ":dn:" port) (display oid port) (display ":=" port) (rfc2254-write-att-value value port))))
    (define write-ldap-filter*
      (match-lambda
       ((? ldif-filter-box? x) (display "(" port) (write-ldap-filter* (ldif-filter-box-v x)) (display ")" port))
@@ -331,7 +337,12 @@
       ;; simple
       (((? simple-filter? filtertype) attr value)
        (display attr port) (display filtertype port) (rfc2254-write-att-value value port))
-      (('dn: . more) (error "LDAP filter 'extensible' NOT YET IMPLEMENTED" more))
+      (('matching attr match . more)
+       (display attr port)
+       (write-extensible-part match)
+       (for-each
+        (lambda (match) (display "/") (write-extensible-part match))
+        more))
       (('substring attr x . more) (display attr port) (display "=" port) (for-each (lambda (x) (if (eq? x '*) (display '* port) (rfc2254-write-att-value x port))) (cons x more)))
       ;; Aliases for specific forms of `substring`
       (('exists attr) (display attr port) (display "=*" port))

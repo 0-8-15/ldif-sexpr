@@ -18,7 +18,7 @@
    rfc4514-kv?
    rfc4514-kv-k
    rfc4514-kv-v
-  ;; ## 1.2 ldif object contructors
+  ;; ## 1.2 ldif object constructors
    ;; Root object
    make-ldif
    ldif?
@@ -33,6 +33,8 @@
    make-ldif-attribute-set
    ldif-attribute+
    ldif-attributes-fold
+  ;;
+   ldif-ref ;; return the ref URL if the LDIF record is actually a `ref:`
   ;;
   ;; RFC 2849
   ;;

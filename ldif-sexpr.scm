@@ -102,13 +102,24 @@
 
  ;; The (replacement of the) actual functor instantiation.
 
- (import (prefix scheme s:))
- (import (except scheme read write))
- (import chicken)
- (require-extension extras)
- (import (only extras read-line))
- (import (only data-structures identity string-split))
- (use srfi-1 srfi-13 srfi-14 irregex)
+ (cond-expand
+  (chicken-4
+   (import (prefix scheme s:))
+   (import (except scheme read write))
+   (import chicken)
+   (require-extension extras)
+   (import (only extras read-line))
+   (import (only data-structures identity string-split))
+   (use srfi-1 srfi-13 srfi-14 irregex))
+  (else
+   (import (chicken base))
+   (import (chicken blob))
+   (import (chicken fixnum))
+   (import (chicken irregex))
+   (import (only (chicken io) read-line))
+   (import (only (chicken string) string-split))
+   (import srfi-1 srfi-13 srfi-14)
+   (import matchable uri-common)))
 
  (include "ldif-core-impl.scm")
 

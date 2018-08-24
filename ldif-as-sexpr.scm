@@ -1,18 +1,24 @@
 ;;(include "ldif-interfaces.scm")
 (include "ldif-core.scm")
 (include "rdn-as-sexpr.scm")
-(require-library uri-common base64)
+
 (module
  ldif-sexpr
  ((interface: ldif-constructor)
   )
- (import scheme matchable)
- (import uri-common)
- (import (prefix base64 b64:))
- (import chicken)
-
- (import extras)
-
+ (import scheme)
+ (cond-expand
+  (chicken-4
+   (use matchable)
+   (import uri-common)
+   (use (prefix base64 b64:))
+   (import chicken)
+   (import extras))
+  (else
+   (import (chicken blob))
+   (import matchable)
+   (import uri-common)
+   (import (prefix base64 b64:))))
  (define (base64-decode s) (string->blob (b64:base64-decode s)))
  (define (base64-encode b p) (b64:base64-encode (if (string? b) b (blob->string b)) p))
 

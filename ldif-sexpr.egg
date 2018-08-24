@@ -1,0 +1,14 @@
+;; -*- mode: Scheme; -*-
+((category parsing)
+ (synopsis "Convert (parse&write) LDIF, rfc4514 and LDAP filters (rfc2254) into S-expressions.")
+ (license "BSD")
+ (author "Jörg F. Wittenberger")
+ (version "0.3")
+ (dependencies uri-common base64 srfi-1 srfi-13 srfi-14 irregex matchable)
+ (components
+  (extension
+   ldif-sexpr
+   (types-file)
+   (csc-options "-O3" "-lfa2" "-d2" "-clustering" ;; "-no-trace" "-no-lambda-info"
+   )
+   #;(modules ldif-sexpr ldif-model-sexpr ldif-core rdn-model-sexpr))))

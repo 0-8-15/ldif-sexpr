@@ -3,7 +3,7 @@
 (include "rdn-as-sexpr.scm")
 
 (module
- ldif-sexpr
+ ldif-model-sexpr
  ((interface: ldif-constructor)
   )
  (import scheme)
@@ -48,13 +48,21 @@
  (define (make-ldif-attribute-set) '())
 
  (define (ldif-attribute+ i k v)
-   `((,k . ,v) . ,i))
+   ;; Sadly the commented out version below is more appropriate.  To
+   ;; ease the use (have less dots and blanks to type) I opted once
+   ;; for the effective one.
+   ;;
+   ;; `((,k . ,v) . ,i)
+   `((,k ,v) . ,i))
 
  (define (ldif-attributes-fold kons nil atts)
    (let loop ((i nil) (s atts))
-     (if (null? s) i (loop (let ((a (car s))) (kons (car a) (cdr a) i)) (cdr s)))))
+     ;; Consequence of the ldif-attribute+ shortcomming we deconstruct differently.
+     ;;
+     ;; (if (null? s) i (loop (let ((a (car s))) (kons (car a) (cdr a) i)) (cdr s)))
+     (if (null? s) i (loop (let ((a (car s))) (kons (car a) (cadr a) i)) (cdr s)))))
 
  ) ;; end module ldif-model
 
 ;; Functor instanciation
-(module ldif-as-sexpr = (ldif-core ldif-sexpr rdn-sexp))
+(module ldif-sexpr = (ldif-core ldif-model-sexpr rdn-model-sexpr))

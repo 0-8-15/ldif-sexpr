@@ -1,6 +1,12 @@
 ;; TBD: Make a better test suite.
 
-(use (prefix ldif-sexpr ldif:))
+(cond-expand
+ (chicken-4
+  (use (prefix ldif-sexpr ldif:)))
+ (else
+  (import (prefix ldif-sexpr ldif:))
+  (import (prefix ldif-model-sexpr ldif:))
+  (import (chicken port))))
 
 (define tr #<<EOF
 ### Sowas

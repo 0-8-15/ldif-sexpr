@@ -1,5 +1,5 @@
 (module
- rdn-sexp
+ rdn-model-sexpr
  ((interface: ldif-rdn-constructor))
  (import scheme)
  (define (rdnsequence . args) args)

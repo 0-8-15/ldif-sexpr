@@ -1,6 +1,9 @@
 ;; This is a work around to avoid having to have so many import
 ;; libraries for all the sum modules.  We simply copy the stuff in here.
 
+(cond-expand
+ (chicken-4
+;; Trying to get around the work around
 (require-extension uri-common base64)
 (module
  ldif-sexpr
@@ -34,7 +37,7 @@
    ldif-attribute+
    ldif-attributes-fold
   ;;
-   ldif-ref ;; return the ref URL if the LDIF record is actually a `ref:`
+  ldif-ref ;; return the ref URL if the LDIF record is actually a `ref:`
   ;;
   ;; RFC 2849
   ;;
@@ -124,3 +127,7 @@
  (include "ldif-core-impl.scm")
 
  )
+) ;; end cond-expand for chicken-4
+(else
+ (include "ldif-as-sexpr.scm")
+ ))

@@ -11,4 +11,4 @@
    (types-file)
    (csc-options "-O3" "-lfa2" "-d2" "-clustering" ;; "-no-trace" "-no-lambda-info"
    )
-   #;(modules ldif-sexpr ldif-model-sexpr ldif-core rdn-model-sexpr))))
+   (modules ldif-sexpr ldif-core))))

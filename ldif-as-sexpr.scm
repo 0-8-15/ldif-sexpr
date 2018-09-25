@@ -19,6 +19,9 @@
    (import matchable)
    (import uri-common)
    (import (prefix base64 b64:))))
+ (cond-expand
+  (chicken-4 (import ports))
+  (else (import (chicken port))))
  (define (base64-decode s) (string->blob (b64:base64-decode s)))
  (define (base64-encode b p) (b64:base64-encode (if (string? b) b (blob->string b)) p))
 

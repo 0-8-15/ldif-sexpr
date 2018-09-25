@@ -10,4 +10,4 @@
 	"rdn-as-sexpr.scm" "ldif-as-sexpr.scm"
 	"ldif-sexpr.scm"
 	"tests/run.scm")
- '((version "0.2")))
+ '((version "0.3")))

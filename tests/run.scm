@@ -5,7 +5,6 @@
   (use (prefix ldif-sexpr ldif:)))
  (else
   (import (prefix ldif-sexpr ldif:))
-  (import (prefix ldif-model-sexpr ldif:))
   (import (chicken port))))
 
 (define tr #<<EOF

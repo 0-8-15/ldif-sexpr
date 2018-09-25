@@ -349,8 +349,5 @@
       (wrong (error "not a valid LDAP filter specification" wrong))))
    (write-ldap-filter* obj))
 
-(cond-expand
- (chicken-4 (import ports))
- (else (import (chicken port))))
  (define (ldap-filter-string obj)
    (call-with-output-string (lambda (p) (write-ldap-filter obj p))))

@@ -4,7 +4,7 @@
  (license "BSD")
  (author "Jörg F. Wittenberger")
  (version "0.3")
- (dependencies uri-common base64 srfi-1 srfi-13 srfi-14 irregex matchable)
+ (dependencies uri-common base64 srfi-1 srfi-13 srfi-14 matchable)
  (components
   (extension
    ldif-sexpr

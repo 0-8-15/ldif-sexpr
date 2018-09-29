@@ -3,7 +3,7 @@
  (synopsis "Convert (parse&write) LDIF, rfc4514 and LDAP filters (rfc2254) into S-expressions.")
  (license "BSD")
  (author "Jörg F. Wittenberger")
- (version "0.3")
+ (version "0.3.1")
  (dependencies uri-common base64 srfi-1 srfi-13 srfi-14 matchable)
  (components
   (extension

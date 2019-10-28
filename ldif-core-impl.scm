@@ -281,7 +281,7 @@
  (define (write ldif #!optional (port (current-output-port)))
    (assert (ldif? ldif))
    (display "dn: " port)
-   (rfc4514-write (ldif-dn ldif))
+   (rfc4514-write (ldif-dn ldif) port)
    (newline port)
    (ldif-attributes-fold ldif-write-a+v port (ldif-attributes ldif))
    (newline port)
